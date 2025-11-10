@@ -1,0 +1,32 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/weka/scratch/bvandur1/adeo1/polya/src/retriever/leansearch/database/__main__.py", line 17, in <module>
+    main()
+  File "/weka/scratch/bvandur1/adeo1/polya/src/retriever/leansearch/database/__init__.py", line 51, in main
+    load_data(project, prefixes, conn)
+  File "/weka/scratch/bvandur1/adeo1/polya/src/retriever/leansearch/database/jixia_db.py", line 153, in load_data
+    load_module(modules, d)
+  File "/weka/scratch/bvandur1/adeo1/polya/src/retriever/leansearch/database/jixia_db.py", line 30, in load_module
+    cursor.executemany(
+  File "/weka/scratch/bvandur1/adeo1/polya/src/retriever/leansearch/.venv/lib/python3.12/site-packages/psycopg/cursor.py", line 118, in executemany
+    self._conn.wait(
+  File "/weka/scratch/bvandur1/adeo1/polya/src/retriever/leansearch/.venv/lib/python3.12/site-packages/psycopg/connection.py", line 406, in wait
+    return waiting.wait(gen, self.pgconn.socket, interval=interval)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "psycopg_binary/_psycopg/waiting.pyx", line 198, in psycopg_binary._psycopg.wait_c
+  File "/weka/scratch/bvandur1/adeo1/polya/src/retriever/leansearch/.venv/lib/python3.12/site-packages/psycopg/_cursor_base.py", line 219, in _executemany_gen_pipeline
+    for params in params_seq:
+                  ^^^^^^^^^^
+  File "/weka/scratch/bvandur1/adeo1/polya/src/retriever/leansearch/database/jixia_db.py", line 29, in <genexpr>
+    values = ((Jsonb(m), project.path_of_module(m, base_dir).read_bytes(), project.load_module_info(m).docstring) for m in data)
+                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/weka/scratch/bvandur1/adeo1/polya/src/retriever/leansearch/.venv/lib/python3.12/site-packages/jixia/run.py", line 156, in load_module_info
+    return ModuleInfo.model_validate_json(fp.read())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/weka/scratch/bvandur1/adeo1/polya/src/retriever/leansearch/.venv/lib/python3.12/site-packages/pydantic/main.py", line 744, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for ModuleInfo
+  Input should be an object [type=model_type, input_value=['Init', 'Mathlib.Analysi...gy.MetricSpace.Bounded'], input_type=list]
+    For further information visit https://errors.pydantic.dev/2.11/v/model_type

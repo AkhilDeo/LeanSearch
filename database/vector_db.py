@@ -2,12 +2,26 @@ import os
 import logging
 
 import chromadb
-from jixia.structs import pp_name
+from jixia.structs import LeanName, pp_name
 from psycopg import Connection
 
 from .embedding import MistralEmbedding
 
 logger = logging.getLogger(__name__)
+
+def format_doc(
+    module_name: LeanName,
+    index: int,
+    kind: str,
+    name: LeanName,
+    signature: str,
+    informal_name: str,
+    informal_description: str,
+) -> tuple[str, str]:
+    doc = f"{kind} {name} {signature}\n{informal_name}: {informal_description}"
+    doc_id = f"{pp_name(module_name)}:{index}"
+    return doc_id, doc
+
 
 def create_vector_db(conn: Connection, path: str, batch_size: int):
     with open("prompt/embedding_instruction.txt") as fp:
@@ -34,9 +48,9 @@ def create_vector_db(conn: Connection, path: str, batch_size: int):
             batch_doc = []
             batch_id = []
             for module_name, index, kind, name, signature, informal_name, informal_description in batch:
-                batch_doc.append(f"{kind} {name} {signature}\n{informal_name}: {informal_description}")
-                # NOTE: we use module name + index as document id as they cannot contain special characters
-                batch_id.append(f"{pp_name(module_name)}:{index}")
+                doc_id, doc = format_doc(module_name, index, kind, name, signature, informal_name, informal_description)
+                batch_doc.append(doc)
+                batch_id.append(doc_id)
                 if os.environ["DRY_RUN"] == "true":
                     logger.info("DRY_RUN:skipped embedding: %s", f"{kind} {name} {signature} {informal_name}")
             if os.environ["DRY_RUN"] == "true":
